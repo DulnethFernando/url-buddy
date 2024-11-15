@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 
 const UrlSchema = new mongoose.Schema({
-  originalUrl: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  name: { type: String, required: true },
+  originalUrl: { type: String, required: true },
   shortUrl: String,
   date: { type: Date, default: Date.now },
   clickCount: { type: Number, default: 0 },
