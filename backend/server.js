@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/url", urlRoutes);
+app.use(authRoutes);
+app.use(urlRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
