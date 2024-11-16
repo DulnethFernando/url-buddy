@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5000/api/auth/login
+POST http://localhost:5000/login
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ POST http://localhost:5000/api/auth/logout
 Content-Type: application/json
 
 ###
-POST http://localhost:5000/api/url/add
+POST http://localhost:5000/add
 Content-Type: application/json
 
 {
@@ -30,10 +30,10 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5000/api/url/6737087a9190c9a1b5798c23
+DELETE http://localhost:5000/6737087a9190c9a1b5798c23
 
 ###
-GET http://localhost:5000/api/url/YtwE4KO4
+GET http://localhost:5000/YtwE4KO4
 
 ###
-GET http://localhost:5000/api/url/analytics/YtwE4KO4
+GET http://localhost:5000/analytics/ahUY

@@ -19,11 +19,12 @@ export const addUrl = async (req, res) => {
             userId: userId,
             name: name,
             originalUrl: originalUrl,
-            shortUrl: shortUrl
+            shortUrl: shortUrl,
+            date: url.date
         });
     } catch (error) {
         console.log("Error in addUrl controller", error.message);
-        res.status(500).send({ error: "Internal Server Error" });
+        //res.status(500).send({ error: "Internal Server Error" });
     }
 }
 
@@ -43,7 +44,7 @@ export const deleteUrl = async (req, res) => {
         res.status(200).json({ message: "Url deleted successfully" });
     } catch (error) {
         console.log("Error in deleteUrl controller", error.message);
-        res.status(500).send({ error: "Internal Server Error" });
+        //res.status(500).send({ error: "Internal Server Error" });
     }
 }
 
@@ -76,7 +77,6 @@ export const getAnalytics = async (req, res) => {
         const url = await Url.findOne({ shortUrl: req.params.shortUrl });
         if (url) {
             res.json({
-                name: url.name,
                 originalUrl: url.originalUrl,
                 clickCount: url.clickCount,
                 analytics: url.analytics,

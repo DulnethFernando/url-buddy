@@ -1,8 +1,35 @@
 import {useState} from "react";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const HomePage = () => {
     const [name, setName] = useState("");
     const [originalUrl, setOriginalUrl] = useState("");
+
+    const queryClient = useQueryClient();
+
+    const { mutate:Logout, isError } = useMutation({
+        mutationFn: async () => {
+            try {
+                const res = await fetch("/u/logout", {
+                    method: "POST",
+                });
+
+                const data = await res.json();
+                if(!res.ok) throw new Error(data.error || "Failed to logout.");
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] });
+        },
+        onError: () => {
+            toast.error("Logout failed.");
+        }
+    })
 
     const urls = [
         {
@@ -68,9 +95,6 @@ const HomePage = () => {
         setOriginalUrl("");
     };
 
-    const isError = false;
-    const isPending = false;
-
     return (
         <div className="flex flex-col gap-2">
             {urls.map(item => (
@@ -121,7 +145,10 @@ const HomePage = () => {
                 </div>
             ))}
             <div>
-                <button>Logout</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    Logout();
+                }}>Logout</button>
                 <button onClick={() => document.getElementById('my_modal_3').showModal()}>Add URL</button>
                 <dialog id="my_modal_3" className="modal modal-bottom sm:modal-middle">
                     <div className="modal-box">
@@ -139,9 +166,7 @@ const HomePage = () => {
                                        onChange={(e) => setOriginalUrl(e.target.value)}
                                        className="input input-bordered w-full mb-4"/>
                                 <div className="flex justify-between">
-                                    <button className='btn btn-primary rounded-full btn-sm text-white px-3'>
-                                        {isPending ? "Adding..." : "Add"}
-                                    </button>
+                                    <button className='btn btn-primary rounded-full btn-sm text-white px-3'>Add URL</button>
                                 </div>
                             </div>
                             {isError && <div className='text-red-500'>Something went wrong</div>}

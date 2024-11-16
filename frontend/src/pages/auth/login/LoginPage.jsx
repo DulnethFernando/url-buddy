@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
@@ -7,16 +8,40 @@ const LoginPage = () => {
         password: "",
     });
 
+    const queryClient = useQueryClient();
+
+    const { mutate:LoginMutaton, isError, isPending, error } = useMutation({
+        mutationFn: async ({ username, password }) => {
+            try {
+                const res = await fetch("/u/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+                if(!res.ok) throw new Error(data.error || "Failed to login.");
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] });
+        }
+    })
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
+        LoginMutaton(formData);
     };
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-
-    const isError = false;
 
     return (
         <div>
@@ -43,8 +68,8 @@ const LoginPage = () => {
                             value={formData.password}
                         />
                     </label>
-                    <button>Sign In</button>
-                    {isError && <p className='text-red-500'>Something went wrong</p>}
+                    <button>{isPending ? "Loading..." : "Login"}</button>
+                    {isError && <p className='text-red-500'>{error.message}</p>}
                 </form>
                 <div className='flex flex-col md:w-full gap-2 mt-4'>
                     <p className='md:text-lg text-center'>{"Don't"} have an account?</p>
