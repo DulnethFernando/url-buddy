@@ -76,6 +76,7 @@ export const getAnalytics = async (req, res) => {
         const url = await Url.findOne({ shortUrl: req.params.shortUrl });
         if (url) {
             res.json({
+                name: url.name,
                 originalUrl: url.originalUrl,
                 clickCount: url.clickCount,
                 analytics: url.analytics,
