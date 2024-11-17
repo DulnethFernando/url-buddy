@@ -1,7 +1,10 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import {formatUrlDate} from "../../utils/index.js";
 
 const Url = ({ url }) => {
+    const formattedDate = formatUrlDate(url.date);
+
     const queryClient = useQueryClient();
 
     const { mutate: deleteUrl  } = useMutation({
@@ -41,11 +44,11 @@ const Url = ({ url }) => {
                 </div>
                 <div className="flex gap-1">
                     <p>Short Url :</p>
-                    <a href={url.shortUrl}>{url.shortUrl}</a>
+                    <a href={`u/${url.shortUrl}`}>{`http://localhost:5000/u/${url.shortUrl}`}</a>
                 </div>
                 <div className="flex gap-1">
                     <p>Created At :</p>
-                    <p>{url.date}</p>
+                    <p>{formattedDate + " ago"}</p>
                 </div>
                 <div className="flex gap-1">
                     <p>Used Amount :</p>

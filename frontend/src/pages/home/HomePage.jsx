@@ -9,7 +9,39 @@ const HomePage = () => {
 
     const queryClient = useQueryClient();
 
-    const { mutate:Logout, isError } = useMutation({
+    const {
+        mutate: createURL,
+        isError,
+        error,
+    } = useMutation({
+        mutationFn: async ({ name, originalUrl }) => {
+            try {
+                const res = await fetch("/u/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, originalUrl }),
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || "Something went wrong");
+                }
+                return data;
+            } catch (error) {
+                throw new Error(error);
+            }
+        },
+
+        onSuccess: () => {
+            setName("");
+            setOriginalUrl("");
+            toast.success("URL created successfully");
+            queryClient.invalidateQueries({ queryKey: ["urls"] });
+        },
+    });
+
+    const { mutate:Logout } = useMutation({
         mutationFn: async () => {
             try {
                 const res = await fetch("/u/logout", {
@@ -53,9 +85,7 @@ const HomePage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("URL added successfully");
-        setName("");
-        setOriginalUrl("");
+        createURL({ name, originalUrl });
     };
 
     return (
