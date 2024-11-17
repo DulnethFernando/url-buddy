@@ -10,11 +10,11 @@ export const formatUrlDate = (createdAt) => {
     if (timeDifferenceInDays > 1) {
         return createdAtDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
     } else if (timeDifferenceInDays === 1) {
-        return "1d";
+        return "1d ago";
     } else if (timeDifferenceInHours >= 1) {
-        return `${timeDifferenceInHours}h`;
+        return `${timeDifferenceInHours}h ago`;
     } else if (timeDifferenceInMinutes >= 1) {
-        return `${timeDifferenceInMinutes}m`;
+        return `${timeDifferenceInMinutes}m ago`;
     } else {
         return "Just now";
     }

@@ -33,50 +33,57 @@ const Url = ({ url }) => {
         deleteUrl();
     }
 
+    const truncateString = (str, maxLength) => {
+        if (str.length > maxLength) {
+            return str.slice(0, maxLength - 3) + '...';
+        }
+        return str;
+    }
+
     return (
         <div className="collapse collapse-arrow bg-base-200 w-full">
             <input type="radio" name="my-accordion-2"/>
             <div className="collapse-title text-xl font-medium">{url.name}</div>
             <div className="collapse-content">
-                <div className="flex gap-1">
+                <div className="flex gap-2 mb-1">
                     <p>Original Url :</p>
-                    <a href={url.originalUrl}>{url.originalUrl}</a>
+                    <a href={url.originalUrl} className="text-primary underline">{url.originalUrl}</a>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-2 mb-1">
                     <p>Short Url :</p>
-                    <a href={`u/${url.shortUrl}`}>{`http://localhost:5000/u/${url.shortUrl}`}</a>
+                    <a href={`u/${url.shortUrl}`} className="text-primary underline">{`http://localhost:5000/u/${url.shortUrl}`}</a>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-2 mb-1">
                     <p>Created At :</p>
-                    <p>{formattedDate + " ago"}</p>
+                    <p>{formattedDate}</p>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-2 mb-4">
                     <p>Used Amount :</p>
                     <p>{url.clickCount}</p>
                 </div>
                 {url.clickCount > 0 &&
-                    <table className="table table-zebra">
+                    <table className="text-sm min-w-56 border-collapse mb-4 rounded-xl overflow-hidden">
                         <thead>
-                        <tr>
-                            <th>ip</th>
-                            <th>referrer</th>
-                            <th>userAgent</th>
-                            <th>timestamp</th>
+                        <tr className="bg-primary text-secondary font-bold text-left">
+                            <th className="py-[12px] px-[15px]">ip</th>
+                            <th className="py-[12px] px-[15px]">referrer</th>
+                            <th className="py-[12px] px-[15px]">userAgent</th>
+                            <th className="py-[12px] px-[15px]">timestamp</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="font-semibold [&>*:nth-child(even)]:bg-gray-50 [&>*:nth-child(even)]:text-primary [&>*:last-of-type]:border-b-primary [&>*:last-of-type]:border-b-4">
                         {url.analytics.map((data) => (
-                            <tr className="border-b-2 border-b-gray-50">
-                                <td>{data.ip}</td>
-                                <td>{data.referrer}</td>
-                                <td>{data.userAgent}</td>
-                                <td>{data.timestamp}</td>
+                            <tr className="border-b-2 border-b-[#dddddd]">
+                                <td className="py-[12px] px-[15px]">{data.ip}</td>
+                                <td className="py-[12px] px-[15px]">{data.referrer}</td>
+                                <td className="py-[12px] px-[15px]">{truncateString(data.userAgent, 100)}</td>
+                                <td className="py-[12px] px-[15px]">{data.timestamp}</td>
                             </tr>
                         ))}
                         </tbody>
                     </table>
                 }
-                <button onClick={handleDeleteUrl}>Delete URL</button>
+                <button onClick={handleDeleteUrl} className="btn rounded-full bg-red-500  hover:bg-red-500 text-secondary">Delete URL</button>
             </div>
         </div>
     );

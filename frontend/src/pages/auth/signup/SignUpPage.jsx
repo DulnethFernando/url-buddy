@@ -46,9 +46,9 @@ const SignUpPage = () => {
     };
 
     return (
-        <div>
-            <div>
-                <form onSubmit={handleSubmit}>
+        <div className="max-w-screen-xl mx-auto flex h-screen px-10">
+            <div className='flex-1 flex flex-col justify-center items-center'>
+                <form className='md:w-full mx-auto md:mx-20 sm:mx-5 flex gap-4 flex-col' onSubmit={handleSubmit}>
                     <h1 className='text-4xl font-extrabold'>Join today.</h1>
                     <label className='input input-bordered rounded flex items-center gap-2'>
                         <input
@@ -70,7 +70,9 @@ const SignUpPage = () => {
                             value={formData.password}
                         />
                     </label>
-                    <button>{isPending ? "Loading..." : "Sign Up"}</button>
+                    <button className='btn rounded-full btn-primary text-white'>
+                        {isPending ? "Loading..." : "Sign Up"}
+                    </button>
                     {isError && <p className='text-red-500'>{error.message}</p>}
                 </form>
                 <div className='flex flex-col md:w-full gap-2 mt-4'>
