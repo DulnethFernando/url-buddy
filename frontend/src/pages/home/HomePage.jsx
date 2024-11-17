@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Url from "../../components/Url/Url.jsx";
 
 const HomePage = () => {
     const [name, setName] = useState("");
@@ -59,52 +60,8 @@ const HomePage = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            {urls?.map(item => (
-                <div className="collapse collapse-arrow bg-base-200 w-full">
-                    <input type="radio" name="my-accordion-2"/>
-                    <div className="collapse-title text-xl font-medium">{item.name}</div>
-                    <div className="collapse-content">
-                        <div className="flex gap-1">
-                            <p>Original Url :</p>
-                            <a href={item.originalUrl}>{item.originalUrl}</a>
-                        </div>
-                        <div className="flex gap-1">
-                            <p>Short Url :</p>
-                            <a href={item.shortUrl}>{item.shortUrl}</a>
-                        </div>
-                        <div className="flex gap-1">
-                            <p>Created At :</p>
-                            <p>{item.date}</p>
-                        </div>
-                        <div className="flex gap-1">
-                            <p>Used Amount :</p>
-                            <p>{item.clickCount}</p>
-                        </div>
-                        {item.clickCount > 0 &&
-                            <table className="table table-zebra">
-                                <thead>
-                                <tr>
-                                    <th>ip</th>
-                                    <th>referrer</th>
-                                    <th>userAgent</th>
-                                    <th>timestamp</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {item.analytics.map((data) => (
-                                    <tr className="border-b-2 border-b-gray-50">
-                                        <td>{data.ip}</td>
-                                        <td>{data.referrer}</td>
-                                        <td>{data.userAgent}</td>
-                                        <td>{data.timestamp}</td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
-                        }
-                        <button>Delete Added URL</button>
-                    </div>
-                </div>
+            {urls?.map((url) => (
+                <Url key={url._id} url={url} />
             ))}
             <div>
                 <button onClick={(e) => {
