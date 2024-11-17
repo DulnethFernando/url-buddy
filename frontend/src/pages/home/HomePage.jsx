@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const HomePage = () => {
@@ -29,64 +29,26 @@ const HomePage = () => {
         onError: () => {
             toast.error("Logout failed.");
         }
-    })
+    });
 
-    const urls = [
-        {
-            name: "Longest Domain",
-            originalUrl: "https://thelongestdomainnameintheworldandthensome.com/",
-            shortUrl: "https://localhost:5000/uh4u",
-            date: "now",
-            clickCount: 3,
-            analytics: [
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                },
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                },
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                }
-            ]
-        },
-        {
-            name: "Longest Domain",
-            originalUrl: "https://thelongestdomainnameintheworldandthensomeandthensomemoreandmore.com/",
-            shortUrl: "https://localhost:5000/uh4u",
-            date: "yesterday",
-            clickCount: 3,
-            analytics: [
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                },
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                },
-                {
-                    ip: "ip",
-                    referer: "direct",
-                    userAgent: "Google",
-                    timestamp: "sdrhg"
-                }
-            ]
+    const URL_ENDPOINT = "u/urls/all";
+
+    const { data: urls } = useQuery({
+        queryKey: ["urls"],
+        queryFn: async () => {
+            try {
+                const res = await fetch(URL_ENDPOINT);
+                const data = res.json();
+
+                //if(!res.ok) throw new Error(data.error || "Something Went Wrong.");
+                console.log("Urls are here:", data)
+                console.log(data);
+                return data;
+            } catch (error) {
+                throw new Error(error);
+            }
         }
-    ];
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -97,7 +59,7 @@ const HomePage = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            {urls.map(item => (
+            {urls?.map(item => (
                 <div className="collapse collapse-arrow bg-base-200 w-full">
                     <input type="radio" name="my-accordion-2"/>
                     <div className="collapse-title text-xl font-medium">{item.name}</div>
@@ -123,7 +85,7 @@ const HomePage = () => {
                                 <thead>
                                 <tr>
                                     <th>ip</th>
-                                    <th>referer</th>
+                                    <th>referrer</th>
                                     <th>userAgent</th>
                                     <th>timestamp</th>
                                 </tr>
@@ -132,7 +94,7 @@ const HomePage = () => {
                                 {item.analytics.map((data) => (
                                     <tr className="border-b-2 border-b-gray-50">
                                         <td>{data.ip}</td>
-                                        <td>{data.referer}</td>
+                                        <td>{data.referrer}</td>
                                         <td>{data.userAgent}</td>
                                         <td>{data.timestamp}</td>
                                     </tr>

@@ -1,5 +1,6 @@
 import Url from "../models/Url.model.js";
 import { nanoid } from "nanoid";
+import User from "../models/User.model.js";
 
 export const addUrl = async (req, res) => {
     try {
@@ -72,20 +73,22 @@ export const redirect = async (req, res) => {
     }
 }
 
-export const getAnalytics = async (req, res) => {
+export const getAllUrls = async (req, res) => {
     try {
-        const url = await Url.findOne({ shortUrl: req.params.shortUrl });
-        if (url) {
-            res.json({
-                originalUrl: url.originalUrl,
-                clickCount: url.clickCount,
-                analytics: url.analytics,
-            });
-        } else {
-            res.status(404).json("URL not found");
+        const userId = req.user._id.toString();
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const urls = await Url.find({ "userId": userId });
+
+        if (urls.length === 0) {
+            return res.status(200).json([]);
         }
+
+        res.status(200).json(urls);
     } catch (error) {
-        console.log("Error in getAnalytics controller", error.message);
-        res.status(500).send({ error: "Internal Server Error" });
+        console.log("Error in getAllUrls controller: ", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 }
