@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/u": {
-        target: import.meta.mode === "development" ? "http://localhost:5000" : "https://url-buddy.vercel.app/",
+        target: import.meta.mode === "development" ? "http://localhost:5000" : "/u",
         changeOrigin: true
       }
     }
