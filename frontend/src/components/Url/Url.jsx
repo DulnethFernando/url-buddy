@@ -24,7 +24,7 @@ const Url = ({ url }) => {
             }
         },
         onSuccess: () => {
-            toast.success("Post deleted successfully");
+            toast.success("URL deleted successfully");
             queryClient.invalidateQueries({ queryKey: ["urls"] });
         },
     });

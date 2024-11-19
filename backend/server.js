@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import connectMongoDB from "./db/connectMongoDB.js";
@@ -14,6 +15,11 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({
+    origin: ["https://url-buddy.vercel.app"],
+    credentials: true
+}))
 
 app.use(cookieParser());
 
